@@ -1,0 +1,17 @@
+<h2>Create Account</h2>
+
+<form (ngSubmit)="onSubmit()" #accountForm="ngForm">
+  <label>Email:</label>
+  <input name="email" [(ngModel)]="email" required type="email" />
+
+  <label>Password:</label>
+  <input name="password" [(ngModel)]="password" required type="password" />
+
+  <label>Confirm Password:</label>
+  <input name="confirmPassword" [(ngModel)]="confirmPassword" required type="password" />
+
+  <button type="submit" [disabled]="!accountForm.valid">Create Account</button>
+</form>
+
+<p>Already have an account? <a routerLink="/login">Log in</a></p>
+

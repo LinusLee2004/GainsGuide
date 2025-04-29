@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrackProgressComponent } from './track-progress.component';
+import { CreateAccountComponent } from './create-account.component';
 
-describe('TrackProgressComponent', () => {
-  let component: TrackProgressComponent;
-  let fixture: ComponentFixture<TrackProgressComponent>;
+describe('CreateAccountComponent', () => {
+  let component: CreateAccountComponent;
+  let fixture: ComponentFixture<CreateAccountComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrackProgressComponent]
+      imports: [CreateAccountComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TrackProgressComponent);
+    fixture = TestBed.createComponent(CreateAccountComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
