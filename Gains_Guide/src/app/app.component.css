@@ -1,0 +1,8 @@
+.exercise-container {
+    display: flex;
+    flex-direction: row; /* left to right layout */
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; /* wrap to next row if not enough space */
+  }
+  
