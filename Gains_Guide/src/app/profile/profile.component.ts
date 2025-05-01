@@ -1,30 +1,39 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserService } from '../services/user.service';
+import { UserProfile } from '../models/user.model';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-profile',
   standalone: true,
-  imports: [],
+  selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  imports: [ReactiveFormsModule], // 👈 this line is critical
 })
-export class ProfileComponent {
-  email: string | null = null;
+export class ProfileComponent implements OnInit {
+  profileForm!: FormGroup;
+  user!: UserProfile | null;
 
-  constructor(private router: Router) {}
+  constructor(private fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit() {
-    const storedEmail = localStorage.getItem('loggedInUser');
-    if (!storedEmail) {
-      // No one is logged in — redirect to login
-      this.router.navigate(['/login']);
-    } else {
-      this.email = storedEmail;
-    }
+    this.userService.user$.subscribe(user => {
+      this.user = user;
+      this.profileForm = this.fb.group({
+        name: [user?.name || ''],
+        email: [user?.email || ''],
+        age: [user?.age || ''],
+        gender: [user?.gender || ''],
+        height: [user?.height || ''],
+        weight: [user?.weight || ''],
+        goal: [user?.goal || ''],
+      });
+    });
   }
 
-  logout() {
-    localStorage.removeItem('loggedInUser');
-    this.router.navigate(['/login']);
+  save() {
+    if (this.profileForm.valid) {
+      this.userService.updateUser(this.profileForm.value);
+    }
   }
 }
