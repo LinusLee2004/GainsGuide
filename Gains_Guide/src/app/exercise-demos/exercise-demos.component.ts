@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-exercise-demos',
-  imports: [],
-  templateUrl: './exercise-demos.component.html',
-  styleUrl: './exercise-demos.component.css'
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './exercise-demos.component.html'
 })
-export class ExerciseDemosComponent {
-
-}
+export class ExerciseDemosComponent {}

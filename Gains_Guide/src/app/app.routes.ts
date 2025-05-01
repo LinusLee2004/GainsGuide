@@ -7,8 +7,11 @@ import { LogWorkoutComponent } from './log-workout/log-workout.component';
 import { TrackProgressComponent } from './track-progress/track-progress.component';
 import { WorkoutHistoryComponent } from './workout-history/workout-history.component';
 import { LoginComponent } from './login/login.component';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 export const appRoutes: Routes = [
+  { path: 'welcome', component: LoginComponent },
+  { path: 'create-account', component: CreateAccountComponent},
   { path: 'login', component: LoginComponent},
   { path: 'profile', component: ProfileComponent },
   { path: 'account-settings', component: AccountSettingsComponent },

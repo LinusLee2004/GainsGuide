@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <!-- Brand with spacing -->
+    <a class="navbar-brand me-3" routerLink="/">GainsGuide</a>
+
+    <!-- Toggler stays on right -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- All nav content -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="d-flex flex-wrap align-items-center gap-2 w-100">
+        <div class="d-flex flex-wrap gap-2 me-auto">
+          <a class="btn btn-outline-light" routerLink="/account-settings" routerLinkActive="active">Account Settings</a>
+          <a class="btn btn-outline-light" routerLink="/exercise-demos" routerLinkActive="active">Exercise Demos</a>
+          <a class="btn btn-outline-light" routerLink="/log-workout" routerLinkActive="active">Log Workout</a>
+          <a class="btn btn-outline-light" routerLink="/profile" routerLinkActive="active">Profile</a>
+          <a class="btn btn-outline-light" routerLink="/track-progress" routerLinkActive="active">Track Progress</a>
+          <a class="btn btn-outline-light" routerLink="/workout-history" routerLinkActive="active">Workout History</a>
+        </div>
+        <button class="btn btn-danger" (click)="onLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>

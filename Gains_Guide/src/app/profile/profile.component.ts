@@ -1,39 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { UserService } from '../services/user.service';
-import { UserProfile } from '../models/user.model';
-import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
-  standalone: true,
   selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  imports: [ReactiveFormsModule], // 👈 this line is critical
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './profile.component.html'
 })
 export class ProfileComponent implements OnInit {
-  profileForm!: FormGroup;
-  user!: UserProfile | null;
+  user: any = null;
+  successMessage = '';
 
-  constructor(private fb: FormBuilder, private userService: UserService) {}
+  constructor(private authService: AuthService) {}
 
-  ngOnInit() {
-    this.userService.user$.subscribe(user => {
-      this.user = user;
-      this.profileForm = this.fb.group({
-        name: [user?.name || ''],
-        email: [user?.email || ''],
-        age: [user?.age || ''],
-        gender: [user?.gender || ''],
-        height: [user?.height || ''],
-        weight: [user?.weight || ''],
-        goal: [user?.goal || ''],
-      });
-    });
+  ngOnInit(): void {
+    this.user = this.authService.getCurrentUser();
+    if (this.user) {
+      this.user = { ...this.user }; // clone to avoid modifying original until saved
+    }
   }
 
-  save() {
-    if (this.profileForm.valid) {
-      this.userService.updateUser(this.profileForm.value);
+  saveProfile(): void {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const index = users.findIndex((u: { email: string }) => u.email === this.user.email);
+    if (index > -1) {
+      users[index] = this.user;
+      localStorage.setItem('users', JSON.stringify(users));
+      this.successMessage = 'Profile updated!';
     }
   }
 }
