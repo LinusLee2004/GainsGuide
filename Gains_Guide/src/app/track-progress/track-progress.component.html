@@ -1,1 +1,19 @@
-<p>track-progress works!</p>
+<div class="container mt-5">
+    <h2 class="mb-4">Track Progress</h2>
+  
+    <div *ngIf="objectKeys(progressData).length > 0; else noData">
+      <div *ngFor="let exercise of objectKeys(progressData)">
+        <h5 class="mt-4 text-primary">{{ exercise }}</h5>
+        <ul class="list-group mb-3">
+          <li *ngFor="let entry of progressData[exercise]" class="list-group-item">
+            {{ entry.date }} - Volume: {{ entry.volume }} lbs
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <ng-template #noData>
+      <p class="text-muted">No workout data available to display progress.</p>
+    </ng-template>
+  </div>
+  

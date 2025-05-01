@@ -1,38 +1,29 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
   email = '';
   password = '';
+  loginError = '';
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit() {
-    const savedPassword = localStorage.getItem(this.email);
-
-    if (!savedPassword) {
-      alert('Account not found. Please create one.');
-      return;
+  onSubmit(): void {
+    const success = this.authService.login(this.email, this.password);
+    if (success) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.loginError = 'Invalid email or password';
     }
-
-    if (savedPassword !== this.password) {
-      alert('Incorrect password.');
-      return;
-    }
-
-    
-    localStorage.setItem('loggedInUser', this.email);
-
-    alert('Login successful!');
-    this.router.navigate(['/profile']);
   }
+  
 }

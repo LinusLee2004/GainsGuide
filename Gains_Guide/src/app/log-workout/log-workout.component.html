@@ -1,1 +1,54 @@
-<p>log-workout works!</p>
+<div class="container mt-5">
+    <h2 class="mb-4">Log Workout</h2>
+  
+    <form (ngSubmit)="logWorkout()" #logForm="ngForm">
+      <div class="mb-3">
+        <label>Exercise</label>
+        <input type="text" [(ngModel)]="workout.exercise" name="exercise" class="form-control" required />
+      </div>
+  
+      <div class="mb-3">
+        <label>Sets</label>
+        <input type="number" [(ngModel)]="workout.sets" name="sets" class="form-control" required />
+      </div>
+  
+      <div class="mb-3">
+        <label>Reps</label>
+        <input type="number" [(ngModel)]="workout.reps" name="reps" class="form-control" required />
+      </div>
+  
+      <div class="mb-3">
+        <label>Weight (lbs)</label>
+        <input type="number" [(ngModel)]="workout.weight" name="weight" class="form-control" required />
+      </div>
+  
+      <button type="submit" class="btn btn-success">Add Workout</button>
+    </form>
+  
+    <hr class="my-4" />
+  
+    <h4>Today's Workouts</h4>
+    <table class="table table-striped mt-3" *ngIf="todayWorkouts.length > 0; else noLogs">
+      <thead>
+        <tr>
+          <th>Exercise</th>
+          <th>Sets</th>
+          <th>Reps</th>
+          <th>Weight (lbs)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let w of todayWorkouts">
+          <td>{{ w.exercise }}</td>
+          <td>{{ w.sets }}</td>
+          <td>{{ w.reps }}</td>
+          <td>{{ w.weight }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <ng-template #noLogs>
+      <p class="text-muted">No workouts logged for today.</p>
+    </ng-template>
+  </div>
+  

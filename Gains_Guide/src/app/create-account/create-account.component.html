@@ -1,17 +1,34 @@
-<h2>Create Account</h2>
+<div class="container mt-5" style="max-width: 400px;">
+  <h2 class="mb-4">Create Account</h2>
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="mb-3">
+      <label>Name</label>
+      <input type="text" name="name" [(ngModel)]="name" class="form-control" required />
+    </div>
 
-<form (ngSubmit)="onSubmit()" #accountForm="ngForm">
-  <label>Email:</label>
-  <input name="email" [(ngModel)]="email" required type="email" />
+    <div class="mb-3">
+      <label>Age</label>
+      <input type="number" name="age" [(ngModel)]="age" class="form-control" required />
+    </div>
 
-  <label>Password:</label>
-  <input name="password" [(ngModel)]="password" required type="password" />
+    <div class="mb-3">
+      <label>Email</label>
+      <input type="email" name="email" [(ngModel)]="email" class="form-control" required />
+    </div>
 
-  <label>Confirm Password:</label>
-  <input name="confirmPassword" [(ngModel)]="confirmPassword" required type="password" />
+    <div class="mb-3">
+      <label>Password</label>
+      <input type="password" name="password" [(ngModel)]="password" class="form-control" required />
+    </div>
 
-  <button type="submit" [disabled]="!accountForm.valid">Create Account</button>
-</form>
+    <div class="mb-3">
+      <label>Confirm Password</label>
+      <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" class="form-control" required />
+    </div>
 
-<p>Already have an account? <a routerLink="/login">Log in</a></p>
+    <button type="submit" class="btn btn-success w-100">Create Account</button>
+  </form>
 
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+</div>

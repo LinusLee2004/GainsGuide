@@ -1,20 +1,30 @@
-<div class="p-4 max-w-xl mx-auto">
-  <h2 class="text-2xl font-bold mb-4">Your Profile</h2>
+<div class="container mt-5" *ngIf="user; else noUser">
+  <h2 class="mb-4">Edit Profile</h2>
 
-  <form [formGroup]="profileForm" (ngSubmit)="save()">
-    <label>Name: <input type="text" formControlName="name"></label><br>
-    <label>Email: <input type="email" formControlName="email"></label><br>
-    <label>Age: <input type="number" formControlName="age"></label><br>
-    <label>Gender: <input type="text" formControlName="gender"></label><br>
-    <label>Height (in/cm): <input type="number" formControlName="height"></label><br>
-    <label>Weight (lb/kg): <input type="number" formControlName="weight"></label><br>
-    <label>Goal:
-      <select formControlName="goal">
-        <option value="cutting">Cutting</option>
-        <option value="bulking">Bulking</option>
-        <option value="maintenance">Maintenance</option>
-      </select>
-    </label><br><br>
-    <button type="submit">Save</button>
+  <form (ngSubmit)="saveProfile()">
+    <div class="mb-3">
+      <label>Name</label>
+      <input type="text" [(ngModel)]="user.name" name="name" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label>Email (cannot change)</label>
+      <input type="email" [value]="user.email" class="form-control" disabled />
+    </div>
+
+    <div class="mb-3">
+      <label>Age</label>
+      <input type="number" [(ngModel)]="user.age" name="age" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">
+    {{ successMessage }}
+  </div>
 </div>
+
+<ng-template #noUser>
+  <div class="alert alert-warning mt-5">No user is currently logged in.</div>
+</ng-template>

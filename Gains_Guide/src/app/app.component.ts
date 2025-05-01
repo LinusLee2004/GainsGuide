@@ -1,10 +1,23 @@
-import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './navbar/navbar.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
-  standalone: true,
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  imports: [RouterModule, RouterOutlet],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, NavbarComponent],
+  templateUrl: './app.component.html'
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  isLoggedIn = false;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+    });
+  }
+}

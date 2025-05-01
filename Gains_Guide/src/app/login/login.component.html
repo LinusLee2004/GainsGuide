@@ -1,33 +1,30 @@
-<div class="login-container">
-    <div class="login-left">
-      <h2>Login! </h2>
-      <p>How do I get started?</p>
-      <button class="btn btn-google">Sign in with Google</button>
-      <button class="btn btn-apple">Sign in with Apple</button>
-  
-      <p>or Login with Email</p>
-  
-      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="test@atheros.ai" required>
-  
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="******" required>
-  
-        <button type="submit" class="btn btn-signin" [disabled]="!loginForm.valid">Sign In</button>
-      </form>
-  
-      <p>Don't have an account? <a routerLink="/create-account">Sign Up Now</a></p>
-
-
+<div class="container mt-5" style="max-width: 400px;">
+  <h1>Welcome to GainsGuide!</h1>
+  <br>
+  <p>This is a simple user friendly app to track your workouts and progression. To access all Gains Guide has to offer Log in or create account bellow.</p>
+  <br>
+  <h2 class="mb-4">Login</h2>
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <div class="mb-3">
+      <label>Email</label>
+      <input type="email" name="email" [(ngModel)]="email" class="form-control" required />
     </div>
-  
-    <div class="login-right">
-      <div class="login-info">
-        <h3>Why should I login?</h3>
-        <p>By logging in, you can access your personal dashboard, where you can manage your account, view your profile, and much more.</p>
-        <img src="assets/dashboard-example.png" alt="Dashboard example">
-      </div>
+
+    <div class="mb-3">
+      <label>Password</label>
+      <input type="password" name="password" [(ngModel)]="password" class="form-control" required />
     </div>
+
+    <button type="submit" class="btn btn-primary w-100">Login</button>
+  </form>
+
+  <div *ngIf="loginError" class="alert alert-danger mt-3">
+    {{ loginError }}
   </div>
-  
+
+  <div class="text-center mt-3">
+    <p>Don't have an account?</p>
+    <a routerLink="/create-account" class="btn btn-outline-secondary">Create Account</a>
+
+  </div>
+</div>
