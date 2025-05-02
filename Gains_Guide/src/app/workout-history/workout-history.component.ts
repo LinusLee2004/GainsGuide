@@ -1,42 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Workout {
-  exercise: string;
-  sets: number;
-  reps: number;
-  weight: number;
-  date: string;
-}
+import { WorkoutService } from '../services/workout.service';
+import { WorkoutEntry } from '../models/workout.model';
+import { AsyncPipe, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-workout-history',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './workout-history.component.html'
+  imports: [CommonModule, NgForOf, AsyncPipe],
+  templateUrl: './workout-history.component.html',
+  styleUrls: ['./workout-history.component.css']
 })
 export class WorkoutHistoryComponent implements OnInit {
-  groupedWorkouts: { [date: string]: Workout[] } = {};
+  workouts: WorkoutEntry[] = [];
+  groupedWorkouts: { [date: string]: WorkoutEntry[] } = {};
+
+  constructor(private workoutService: WorkoutService) {}
 
   ngOnInit(): void {
-    const raw = localStorage.getItem('workouts');
-    const workouts: Workout[] = raw ? JSON.parse(raw) : [];
-
-    // Group workouts by date
-    workouts.forEach(w => {
-      if (!this.groupedWorkouts[w.date]) {
-        this.groupedWorkouts[w.date] = [];
-      }
-      this.groupedWorkouts[w.date].push(w);
+    this.workoutService.getWorkouts().subscribe(data => {
+      this.workouts = data;
+      this.groupWorkoutsByDate();
     });
+  }
 
-    // Sort workouts within each date (optional)
-    for (const date in this.groupedWorkouts) {
-      this.groupedWorkouts[date].sort((a, b) => a.exercise.localeCompare(b.exercise));
+  private groupWorkoutsByDate(): void {
+    this.groupedWorkouts = {};
+    for (const workout of this.workouts) {
+      if (!this.groupedWorkouts[workout.date]) {
+        this.groupedWorkouts[workout.date] = [];
+      }
+      this.groupedWorkouts[workout.date].push(workout);
     }
   }
 
-  get sortedDates(): string[] {
-    return Object.keys(this.groupedWorkouts).sort((a, b) => b.localeCompare(a)); // newest date first
+  getSortedDates(): string[] {
+    return Object.keys(this.groupedWorkouts).sort((a, b) => b.localeCompare(a));
   }
 }

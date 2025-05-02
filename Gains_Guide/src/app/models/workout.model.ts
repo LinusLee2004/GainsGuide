@@ -1,5 +1,5 @@
 export interface WorkoutEntry {
-  id: number;
+  id?: string;
   date: string;
   notes?: string;
   exercises: LoggedExercise[];

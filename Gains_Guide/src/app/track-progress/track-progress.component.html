@@ -1,19 +1,19 @@
-<div class="container mt-5">
-    <h2 class="mb-4">Track Progress</h2>
-  
-    <div *ngIf="objectKeys(progressData).length > 0; else noData">
-      <div *ngFor="let exercise of objectKeys(progressData)">
-        <h5 class="mt-4 text-primary">{{ exercise }}</h5>
-        <ul class="list-group mb-3">
-          <li *ngFor="let entry of progressData[exercise]" class="list-group-item">
-            {{ entry.date }} - Volume: {{ entry.volume }} lbs
+<div *ngIf="(workouts$ | async) as workouts">
+  <div *ngFor="let workout of workouts">
+    <h3>{{ workout.date }}</h3>
+    <p *ngIf="workout.notes"><em>{{ workout.notes }}</em></p>
+    <ul>
+      <li *ngFor="let ex of workout.exercises">
+        <strong>{{ ex.name }}</strong>
+        <ul>
+          <li *ngFor="let set of ex.sets">
+            {{ set.reps }} reps × {{ set.weight }} lbs
+            <span *ngIf="set.rpe"> &#64; RPE {{ set.rpe }}</span>
           </li>
         </ul>
-      </div>
-    </div>
-  
-    <ng-template #noData>
-      <p class="text-muted">No workout data available to display progress.</p>
-    </ng-template>
+      </li>
+    </ul>
+    <button (click)="deleteWorkout(workout.id)">Delete</button>
+    <hr>
   </div>
-  
+</div>
