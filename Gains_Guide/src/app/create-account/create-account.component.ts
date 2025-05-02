@@ -27,23 +27,24 @@ export class CreateAccountComponent {
       this.successMessage = '';
       return;
     }
-
-    const success = this.authService.registerUser({
-      email: this.email,
-      password: this.password,
-      name: this.name,
-      age: this.age || undefined
-    });
-
-    if (success) {
-      this.successMessage = 'Account created! Redirecting to login...';
-      this.errorMessage = '';
-      setTimeout(() => {
-        this.router.navigate(['/welcome']);
-      }, 1500);
-    } else {
-      this.errorMessage = 'That email is already registered.';
-      this.successMessage = '';
-    }
+  
+    this.authService.register(this.email, this.password)
+      .then(() => {
+        this.successMessage = 'Account created! Redirecting to login...';
+        this.errorMessage = '';
+        setTimeout(() => {
+          this.router.navigate(['/welcome']);
+        }, 1500);
+      })
+      .catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          this.errorMessage = 'That email is already registered.';
+        } else {
+          this.errorMessage = 'Account creation failed.';
+        }
+        this.successMessage = '';
+      });
   }
+  
+  
 }

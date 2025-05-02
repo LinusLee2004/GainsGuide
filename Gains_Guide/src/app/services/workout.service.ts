@@ -1,23 +1,30 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Firestore, collection, collectionData, addDoc, doc, deleteDoc, query, where } from '@angular/fire/firestore';
+import { Observable, of } from 'rxjs';
 import { WorkoutEntry } from '../models/workout.model';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutService {
-  private workouts = new BehaviorSubject<WorkoutEntry[]>([]);
-  workouts$ = this.workouts.asObservable();
+  constructor(private firestore: Firestore, private authService: AuthService) {}
+
+  getWorkouts(): Observable<WorkoutEntry[]> {
+    const userId = this.authService.currentUser?.uid;
+    if (!userId) return of([]);
+
+    const workoutsRef = collection(this.firestore, 'workouts');
+    const userQuery = query(workoutsRef, where('userId', '==', userId));
+
+    return collectionData(userQuery, { idField: 'id' }) as Observable<WorkoutEntry[]>;
+  }
 
   addWorkout(workout: WorkoutEntry) {
-    this.workouts.next([...this.workouts.value, workout]);
+    const workoutsRef = collection(this.firestore, 'workouts');
+    return addDoc(workoutsRef, workout);
   }
 
-  updateWorkout(id: number, updated: Partial<WorkoutEntry>) {
-    this.workouts.next(
-      this.workouts.value.map(w => w.id === id ? { ...w, ...updated } : w)
-    );
-  }
-
-  deleteWorkout(id: number) {
-    this.workouts.next(this.workouts.value.filter(w => w.id !== id));
+  deleteWorkout(id: string) {
+    const workoutRef = doc(this.firestore, `workouts/${id}`);
+    return deleteDoc(workoutRef);
   }
 }

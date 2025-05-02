@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.user = this.authService.getCurrentUser();
+    this.user = this.authService.currentUser;
     if (this.user) {
       this.user = { ...this.user }; // clone to avoid modifying original until saved
     }

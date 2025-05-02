@@ -1,32 +1,16 @@
-<div class="container mt-5">
-    <h2 class="mb-4">Workout History</h2>
-  
-    <div *ngIf="sortedDates.length > 0; else noData">
-      <div *ngFor="let date of sortedDates" class="mb-4">
-        <h5 class="text-primary">{{ date }}</h5>
-        <table class="table table-bordered table-sm">
-          <thead>
-            <tr>
-              <th>Exercise</th>
-              <th>Sets</th>
-              <th>Reps</th>
-              <th>Weight (lbs)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let w of groupedWorkouts[date]">
-              <td>{{ w.exercise }}</td>
-              <td>{{ w.sets }}</td>
-              <td>{{ w.reps }}</td>
-              <td>{{ w.weight }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  
-    <ng-template #noData>
-      <p class="text-muted">No workouts have been logged yet.</p>
-    </ng-template>
-  </div>
-  
+<div *ngFor="let workout of workouts">
+  <h3>{{ workout.date }}</h3>
+  <p *ngIf="workout.notes"><em>{{ workout.notes }}</em></p>
+  <ul>
+    <li *ngFor="let ex of workout.exercises">
+      <strong>{{ ex.name }}</strong>
+      <ul>
+        <li *ngFor="let set of ex.sets">
+          {{ set.reps }} reps × {{ set.weight }} lbs
+          <span *ngIf="set.rpe"> &#64; RPE {{ set.rpe }}</span>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <hr>
+</div>
