@@ -7,7 +7,7 @@ import { AsyncPipe, NgForOf } from '@angular/common';
 @Component({
   selector: 'app-workout-history',
   standalone: true,
-  imports: [CommonModule, NgForOf, AsyncPipe],
+  imports: [CommonModule, NgForOf],
   templateUrl: './workout-history.component.html',
   styleUrls: ['./workout-history.component.css']
 })
