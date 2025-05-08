@@ -20,5 +20,5 @@ export const appRoutes: Routes = [
   { path: 'log-workout', component: LogWorkoutComponent },
   { path: 'track-progress', component: TrackProgressComponent },
   { path: 'workout-history', component: WorkoutHistoryComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }, // default route
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, 
 ];

@@ -8,13 +8,13 @@ import { AuthService } from '../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'] // optional
+  styleUrls: ['./navbar.component.css'] 
 })
 export class NavbarComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogout(): void {
     this.authService.logout();
-    this.router.navigate(['/welcome']); // or your login/welcome route
+    this.router.navigate(['/welcome']); 
   }
 }
