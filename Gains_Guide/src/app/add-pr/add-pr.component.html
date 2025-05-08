@@ -1,0 +1,19 @@
+<h2>Add Personal Record</h2>
+<form (submit)="addPR(); $event.preventDefault()">
+  <label>Lift:</label>
+  <input [(ngModel)]="lift" name="lift" required />
+
+  <label>Weight:</label>
+  <input type="number" [(ngModel)]="weight" name="weight" required />
+
+  <label>Units:</label>
+  <select [(ngModel)]="units" name="units">
+    <option value="lbs">lbs</option>
+    <option value="kg">kg</option>
+  </select>
+
+  <label>Date:</label>
+  <input type="date" [(ngModel)]="date" name="date" required />
+
+  <button type="submit">Add PR</button>
+</form>

@@ -1,62 +1,52 @@
 import { Injectable } from '@angular/core';
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  User
+} from '@angular/fire/auth';
+import {
+  Firestore,
+  doc,
+  setDoc
+} from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
-
-interface User {
-  email: string;
-  password: string;
-  name?: string;
-  age?: number;
-}
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(false);
-  isLoggedIn$ = this.loggedIn.asObservable();
-  private currentUserEmail: string | null = null;
+  private userSubject = new BehaviorSubject<User | null>(null);
+  user$ = this.userSubject.asObservable();
+  isLoggedIn$ = this.user$.pipe(map(user => !!user));
 
-  registerUser(user: User): boolean {
-    const users = this.getUsers();
-    const email = user.email.trim().toLowerCase();
-
-    const exists = users.some(u => u.email.trim().toLowerCase() === email);
-    if (exists) return false;
-
-    users.push({ ...user, email });
-    localStorage.setItem('users', JSON.stringify(users));
-    return true;
+  constructor(private auth: Auth, private firestore: Firestore) {
+    onAuthStateChanged(this.auth, user => {
+      this.userSubject.next(user);
+    });
   }
 
-  login(email: string, password: string): boolean {
-    const users = this.getUsers();
-    const match = users.find(u => 
-      u.email.trim().toLowerCase() === email.trim().toLowerCase() && 
-      u.password === password
-    );
-
-    if (match) {
-      this.loggedIn.next(true);
-      this.currentUserEmail = match.email;
-      return true;
-    }
-
-    return false;
+  login(email: string, password: string) {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  logout(): void {
-    this.loggedIn.next(false);
-    this.currentUserEmail = null;
+  register(email: string, password: string) {
+    return createUserWithEmailAndPassword(this.auth, email, password)
+      .then(cred => {
+        const userDoc = doc(this.firestore, `users/${cred.user.uid}`);
+        return setDoc(userDoc, {
+          email,
+          createdAt: new Date()
+        });
+      });
   }
 
-  getCurrentUser(): User | null {
-    const users = this.getUsers();
-    return users.find(u => u.email === this.currentUserEmail) || null;
+  logout() {
+    return signOut(this.auth);
   }
 
-  private getUsers(): User[] {
-    try {
-      return JSON.parse(localStorage.getItem('users') || '[]');
-    } catch {
-      return [];
-    }
+  get currentUser(): User | null {
+    return this.userSubject.value;
   }
 }

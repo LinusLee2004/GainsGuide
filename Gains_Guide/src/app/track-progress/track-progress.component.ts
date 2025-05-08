@@ -1,49 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Workout {
-  exercise: string;
-  sets: number;
-  reps: number;
-  weight: number;
-  date: string;
-}
+import { WorkoutService } from '../services/workout.service';
+import { WorkoutEntry } from '../models/workout.model';
+import { AsyncPipe, NgForOf } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-track-progress',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './track-progress.component.html'
+  imports: [CommonModule, NgForOf, AsyncPipe],
+  templateUrl: './track-progress.component.html',
+  styleUrls: ['./track-progress.component.css']
 })
 export class TrackProgressComponent implements OnInit {
-  allWorkouts: Workout[] = [];
-  progressData: { [exercise: string]: { date: string; volume: number }[] } = {};
-  objectKeys = Object.keys;
+  workouts$: Observable<WorkoutEntry[]>;
 
-  ngOnInit(): void {
-    const stored = localStorage.getItem('workouts');
-    this.allWorkouts = stored ? JSON.parse(stored) : [];
-
-    this.processVolumeByExercise();
+  constructor(private workoutService: WorkoutService) {
+    this.workouts$ = this.workoutService.getWorkouts();
   }
 
-  processVolumeByExercise(): void {
-    for (const workout of this.allWorkouts) {
-      const volume = workout.sets * workout.reps * workout.weight;
+  ngOnInit(): void {}
 
-      if (!this.progressData[workout.exercise]) {
-        this.progressData[workout.exercise] = [];
-      }
-
-      this.progressData[workout.exercise].push({
-        date: workout.date,
-        volume
-      });
+  deleteWorkout(id: string | undefined): void {
+    if (!id) {
+      console.warn('Tried to delete a workout with no ID');
+      return;
     }
-
-    // Sort each array by date (optional)
-    for (const exercise in this.progressData) {
-      this.progressData[exercise].sort((a, b) => a.date.localeCompare(b.date));
-    }
-  }
+  
+    this.workoutService.deleteWorkout(id)
+      .catch(err => console.error('Delete failed:', err));
+  }  
+  
 }
+

@@ -23,8 +23,19 @@
   <div *ngIf="successMessage" class="alert alert-success mt-3">
     {{ successMessage }}
   </div>
+
+  <div *ngIf="prs.length > 0" class="mt-5">
+    <h3>Personal Records</h3>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let pr of prs">
+        <strong>{{ pr.lift }}:</strong> {{ pr.weight }} {{ pr.units }} on {{ pr.date }}
+      </li>
+    </ul>
+  </div>
 </div>
 
 <ng-template #noUser>
   <div class="alert alert-warning mt-5">No user is currently logged in.</div>
 </ng-template>
+
+<button [routerLink]="'/add-pr'" class="btn btn-success mt-4">Add PR</button>

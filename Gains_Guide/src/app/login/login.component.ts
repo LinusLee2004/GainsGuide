@@ -18,12 +18,14 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(): void {
-    const success = this.authService.login(this.email, this.password);
-    if (success) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.loginError = 'Invalid email or password';
-    }
+    this.authService.login(this.email, this.password)
+      .then(() => {
+        this.router.navigate(['/dashboard']);
+      })
+      .catch(() => {
+        this.loginError = 'Invalid email or password';
+      });
   }
+  
   
 }
